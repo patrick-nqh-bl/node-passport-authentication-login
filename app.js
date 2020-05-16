@@ -25,6 +25,25 @@ app.set('view engine', 'ejs');
 // Bodyparser
 app.use(express.urlencoded({ extended: false }));
 
+// Express Session
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+// Connect flash
+app.use(flash());
+
+// Global Vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
+
 // Routes
 app.use('/', require('./routes'));
 app.use('/users', require('./routes/users'));
